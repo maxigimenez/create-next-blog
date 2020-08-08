@@ -5,6 +5,7 @@ import path from 'path';
 import validateNpmName from 'validate-npm-package-name';
 
 import packageJson from './package.json';
+import create from './create';
 
 let projectPath: string = '';
 
@@ -48,7 +49,7 @@ const run = async () => {
     process.exit(1);
   }
 
-  
+  await create({ appPath: resolvedProjectPath });
 }
 
 run()
