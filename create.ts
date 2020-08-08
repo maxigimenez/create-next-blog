@@ -4,11 +4,16 @@ import fs from 'fs';
 import rimraf from 'rimraf';
 
 import { downloadAndExtractRepo } from './helpers/repo';
+import { install } from './helpers/install';
+import { Integrations } from './typings';
+import { prepareContentful } from './helpers/contentful';
 
 const create = async ({
-  appPath
+  appPath,
+  integration
 }: {
   appPath: string;
+  integration: Integrations;
 }) => {
   const root = path.resolve(appPath);
   const appName = path.basename(root);
@@ -28,6 +33,23 @@ const create = async ({
 
   rimraf.sync('.github');
   rimraf.sync('.vscode');
+
+  console.log('Installing packages. This might take a couple of minutes.');
+  console.log();
+
+  await install(root);
+  console.log();
+
+  if (integration === Integrations.CONTENTFUL) {
+    console.log('Contentful integration detected. Preparing keys:');
+    console.log();
+    
+    await prepareContentful(root);
+    console.log();
+
+    rimraf.sync('bin');
+    rimraf.sync('schemas');
+  }
 }
 
 export default create;

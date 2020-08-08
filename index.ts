@@ -6,6 +6,7 @@ import validateNpmName from 'validate-npm-package-name';
 
 import packageJson from './package.json';
 import create from './create';
+import { Integrations } from './typings';
 
 let projectPath: string = '';
 
@@ -14,6 +15,11 @@ const program = new Commander.Command(packageJson.name)
   .arguments('<project-directory>')
   .usage(`${chalk.green('<project-directory>')} [options]`)
   .action((name) => projectPath = name)
+  .option(
+    '-i, --integration [contentful|api]',
+    `Choose data integration`,
+    Integrations.CONTENTFUL
+  )
   .allowUnknownOption()
   .parse(process.argv);
 
@@ -34,6 +40,15 @@ const run = async () => {
     return;
   }
 
+  const { integration } = program;
+  if (!Object.values(Integrations).includes(integration)) {
+    console.error(`Could not create a project with ${chalk.red(integration)} integration`);
+    console.log();
+    console.log(`Please use one of the following ${chalk.green(Object.values(Integrations))}`);
+
+    process.exit(1);
+  }
+
   const resolvedProjectPath = path.resolve(projectPath);
   const projectName = path.basename(resolvedProjectPath);
 
@@ -49,7 +64,7 @@ const run = async () => {
     process.exit(1);
   }
 
-  await create({ appPath: resolvedProjectPath });
+  await create({ appPath: resolvedProjectPath, integration });
 }
 
 run()
