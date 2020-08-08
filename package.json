@@ -1,11 +1,30 @@
 {
   "name": "create-next-blog",
-  "version": "0.0.0",
-  "description": "Create next.js-powered blog with medium-styles",
-  "author": "Maxi Gimenez",
+  "version": "0.0.1",
+  "description": "Create next.js blog with medium styles",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxigimenez/create-next-blog"
+  },
+  "keywords": [
+    "react",
+    "next.js",
+    "blog",
+    "medium"
+  ],
+  "author": "Maxi Gimenez <gimenez.maxi@gmail.com>",
   "license": "MIT",
+  "bin": {
+    "create-next-blog": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "ncc build ./index.ts -w -o dist/"
+    "build": "ncc build ./index.ts -w -o dist/",
+    "prerelease": "rimraf ./dist/",
+    "release": "ncc build ./index.ts -o ./dist/ --minify --no-cache --no-source-map-register",
+    "prepublish": "yarn release"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.2",
