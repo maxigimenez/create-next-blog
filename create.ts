@@ -50,6 +50,33 @@ const create = async ({
     rimraf.sync('bin');
     rimraf.sync('schemas');
   }
+
+  let cdpath: string
+  if (path.join(originalDirectory, appName) === appPath) {
+    cdpath = appName
+  } else {
+    cdpath = appPath
+  }
+
+  console.log(`${chalk.green('Success!')} Created ${appName} at ${appPath}`)
+  console.log('Inside that directory, you can run several commands:')
+  console.log()
+  console.log(chalk.cyan(`  yarn dev`))
+  console.log('    Starts the development server.')
+  console.log()
+  console.log(chalk.cyan(`  yarn build`))
+  console.log('    Builds the app for production.')
+  console.log()
+  console.log(chalk.cyan(`  yarn start`))
+  console.log('    Runs the built app in production mode.')
+  console.log()
+  console.log('We suggest that you begin by typing:')
+  console.log()
+  console.log(chalk.cyan('  cd'), cdpath)
+  console.log(
+    `  ${chalk.cyan(`yarn dev`)}`
+  )
+  console.log()
 }
 
 export default create;
